@@ -26,7 +26,7 @@ jobs:
                 run: Scripts/TestAll
 
             -   name: 💖 Publish Status Badge 💖
-                uses: ./.github/actions/publish-badge
+                uses: rarestype/rarestbadge@v1
                 if: always()
 
     macOS:
@@ -42,5 +42,5 @@ jobs:
                 run: Scripts/TestAll
 
             -   name: 💖 Publish Status Badge 💖
-                uses: ./.github/actions/publish-badge
+                uses: rarestype/rarestbadge@v1
                 if: always()
