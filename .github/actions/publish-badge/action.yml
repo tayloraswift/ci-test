@@ -60,25 +60,3 @@ runs:
                 # Force push using the provided token
                 git remote add origin https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git
                 git push --force origin ci/badges/${{ inputs.badge_name }}
-
-        -   name: Discover and Purge Camo Cache
-            shell: bash
-            run: |
-                RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/ci/badges/${{ inputs.badge_name }}/${{ inputs.badge_name }}.svg"
-
-                # 1. Ask GitHub's API to render markdown of the raw image link.
-                # GitHub automatically translates raw links into Camo URLs during this process.
-                CAMO_URL=$(curl -s -X POST \
-                -H "Authorization: Bearer ${{ inputs.github_token }}" \
-                -H "Accept: application/vnd.github.v3+json" \
-                -d "{\"text\": \"![badge]($RAW_URL)\"}" \
-                https://api.github.com/markdown | grep -o 'https://camo.githubusercontent.com/[^"]*')
-
-                # 2. Issue the PURGE request to the discovered URL
-                if [[ -n "$CAMO_URL" ]]; then
-                echo "Purging Camo URL: $CAMO_URL"
-                curl -s -i -X PURGE "$CAMO_URL" > /dev/null
-                echo "Cache purged successfully."
-                else
-                echo "Warning: Could not extract Camo URL."
-                fi
