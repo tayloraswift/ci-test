@@ -13,8 +13,8 @@ The D library requires Swift 6.2 or later.
 
 | Platform | Status |
 | -------- | ------ |
-| 🐧 Linux | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/refs/badges/ci/linux/status.svg)](https://github.com/tayloraswift/ci-test/actions/workflows/Tests.yml) |
-| 🍏 Darwin | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/refs/badges/ci/macos/status.svg)](https://github.com/tayloraswift/ci-test/actions/workflows/Tests.yml) |
+| 🐧 Linux | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/refs/badges/ci/Linux/status.svg)](https://github.com/tayloraswift/ci-test/actions/workflows/Tests.yml) |
+| 🍏 Darwin | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/refs/badges/ci/macOS/status.svg)](https://github.com/tayloraswift/ci-test/actions/workflows/Tests.yml) |
 
 
 [Check deployment minimums](https://swiftinit.org/docs/d#ss:platform-requirements)
