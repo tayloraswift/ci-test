@@ -28,7 +28,7 @@ jobs:
                 uses: ./.github/actions/publish-badge
                 with:
                     title: "linux build"
-                    badge_name: "${{ job.name }}"
+                    badge_name: "${{ github.job }}"
                     job_status: "${{ job.status }}"
                     github_token: ${{ secrets.GITHUB_TOKEN }}
 
