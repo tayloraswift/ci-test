@@ -1,0 +1,80 @@
+name: "Generate and Publish Badge"
+description: "Generates a status badge, pushes it to an isolated branch, and purges the Camo cache"
+inputs:
+    title:
+        description: "The text to display on the left side of the badge"
+        required: true
+    badge_name:
+        description: "The unique identifier for this badge (used for filename and branch name)"
+        required: true
+    job_status:
+        description: "The status of the caller job (usually passed as ${{ job.status }})"
+        required: true
+    github_token:
+        description: "GitHub token for pushing the branch and calling the API"
+        required: true
+
+runs:
+    using: "composite"
+    steps:
+        -   name: Translate Job Status
+            id: status
+            shell: bash
+            run: |
+                if [[ "${{ inputs.job_status }}" == "success" ]]; then
+                echo "status=passing" >> $GITHUB_OUTPUT
+                else
+                echo "status=failing" >> $GITHUB_OUTPUT
+                fi
+
+        -   name: Generate Badge
+            shell: bash
+            run: |
+                # Call your script to generate .github/resources/badge.svg
+                bash Scripts/RenderBadge "${{ inputs.title }}" "${{ steps.status.outputs.status }}"
+
+        -   name: Commit and Force-Push to Subbranch
+            shell: bash
+            run: |
+                # Work in a temporary directory to avoid touching the main workspace tree
+                mkdir -p /tmp/badge-publish
+                cd /tmp/badge-publish
+
+                # Initialize an empty git repo and checkout the specific subbranch
+                git init
+                git checkout -b ci/badges/${{ inputs.badge_name }}
+
+                git config user.name "rarest automation"
+                git config user.email "automation@noreply.rarestype.com"
+
+                # Copy the generated badge to the root of this orphan branch
+                cp $GITHUB_WORKSPACE/.github/resources/badge.svg ./${{ inputs.badge_name }}.svg
+
+                git add ./${{ inputs.badge_name }}.svg
+                git commit -m "Update badge: ${{ inputs.badge_name }} (${{ steps.status.outputs.status }})"
+
+                # Force push using the provided token
+                git remote add origin https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git
+                git push --force origin ci/badges/${{ inputs.badge_name }}
+
+        -   name: Discover and Purge Camo Cache
+            shell: bash
+            run: |
+                RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/ci/badges/${{ inputs.badge_name }}/${{ inputs.badge_name }}.svg"
+
+                # 1. Ask GitHub's API to render markdown of the raw image link.
+                # GitHub automatically translates raw links into Camo URLs during this process.
+                CAMO_URL=$(curl -s -X POST \
+                -H "Authorization: Bearer ${{ inputs.github_token }}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                -d "{\"text\": \"![badge]($RAW_URL)\"}" \
+                https://api.github.com/markdown | grep -o 'https://camo.githubusercontent.com/[^"]*')
+
+                # 2. Issue the PURGE request to the discovered URL
+                if [[ -n "$CAMO_URL" ]]; then
+                echo "Purging Camo URL: $CAMO_URL"
+                curl -s -i -X PURGE "$CAMO_URL" > /dev/null
+                echo "Cache purged successfully."
+                else
+                echo "Warning: Could not extract Camo URL."
+                fi

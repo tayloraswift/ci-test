@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+BADGE_TITLE_CHARACTERS=$(echo -n "$1" | wc -c)
+BADGE_WIDTH_L=$((28 + BADGE_TITLE_CHARACTERS * 7))
+BADGE_WIDTH_R='60'
+
+if [[ "$2" == 'passing' ]]; then
+    BADGE_STATUS_FG='#ffffff'
+else
+    BADGE_STATUS_FG='#000000'
+fi
+
+sed \
+    -e "s#__BADGE_TITLE__#${1}#g" \
+    -e "s/__BADGE_WIDTH_L__/${BADGE_WIDTH_L}/g" \
+    -e "s/__BADGE_WIDTH_R__/${BADGE_WIDTH_R}/g" \
+    -e "s/__BADGE_WIDTH_TOTAL__/$((BADGE_WIDTH_L + BADGE_WIDTH_R))/g" \
+    -e "s/__BADGE_STATUS__/${2}/g" \
+    -e "s/__BADGE_STATUS_FG__/${BADGE_STATUS_FG}/g" \
+    .github/resources/badge.template.svg > .github/resources/badge.svg
