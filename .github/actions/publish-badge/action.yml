@@ -1,9 +1,6 @@
 name: "Generate and Publish Badge"
 description: "Generates a status badge and pushes it to a ghost ref"
 inputs:
-    token:
-        description: "GitHub token"
-        required: true
     badge:
         description: "Unique identifier for this badge"
         required: true
@@ -58,5 +55,5 @@ runs:
 
                 # Force push using the provided token
                 git push --force \
-                    https://x-access-token:${{ inputs.token }}@github.com/${{ github.repository }}.git \
+                    https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git \
                     HEAD:refs/badges/ci/${{ inputs.badge }}

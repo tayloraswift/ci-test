@@ -30,7 +30,6 @@ jobs:
                 uses: ./.github/actions/publish-badge
                 with:
                     badge: "${{ github.job }}"
-                    token: ${{ secrets.GITHUB_TOKEN }}
 
     macOS:
         runs-on: macos-26
@@ -49,4 +48,3 @@ jobs:
                 uses: ./.github/actions/publish-badge
                 with:
                     badge: "${{ github.job }}"
-                    token: ${{ secrets.GITHUB_TOKEN }}
