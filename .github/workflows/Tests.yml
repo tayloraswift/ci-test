@@ -1,4 +1,4 @@
-name: tests
+name: Tests
 
 on:
     push:
@@ -26,10 +26,8 @@ jobs:
                 run: Scripts/TestAll
 
             -   name: 💖 Publish Status Badge 💖
-                if: always()
                 uses: ./.github/actions/publish-badge
-                with:
-                    badge: "${{ github.job }}"
+                if: always()
 
     macOS:
         runs-on: macos-26
@@ -44,7 +42,5 @@ jobs:
                 run: Scripts/TestAll
 
             -   name: 💖 Publish Status Badge 💖
-                if: always()
                 uses: ./.github/actions/publish-badge
-                with:
-                    badge: "${{ github.job }}"
+                if: always()

@@ -3,7 +3,7 @@ description: "Generates a status badge and pushes it to a ghost ref"
 inputs:
     badge:
         description: "Unique identifier for this badge"
-        required: true
+        required: false
     title:
         description: "Custom text to display on the left side of the badge"
         required: false
@@ -24,13 +24,32 @@ runs:
                     echo "status=failing" >> $GITHUB_OUTPUT
                 fi
 
+                EXPLICIT_NAME="${{ inputs.badge }}"
+
+                if [[ -n "$EXPLICIT_NAME" ]]; then
+                    echo "badge=$EXPLICIT_NAME" >> $GITHUB_OUTPUT
+                else
+                    # Replace spaces with hyphens
+                    WORKFLOW_NAME="${{ github.workflow }}"
+                    WORKFLOW_ID="${WORKFLOW_NAME// /-}"
+                    JOB_ID="${{ github.job }}"
+
+                    # Reject anything that isn't alphanumeric, a hyphen, or an underscore
+                    if [[ "$WORKFLOW_ID" =~ [^a-zA-Z0-9_-] ]] || [[ "$JOB_ID" =~ [^a-zA-Z0-9_-] ]]; then
+                        echo "::error title=Invalid Characters::Workflow name ('$WORKFLOW_NAME') or Job ID ('$JOB_ID') contains invalid characters. Please pass an explicit 'badge_name' input."
+                        exit 1
+                    fi
+
+                    echo "badge=${WORKFLOW_ID}-${JOB_ID}" >> $GITHUB_OUTPUT
+                fi
+
         -   name: Create badge
             shell: bash
             if: steps.status.outputs.status != 'none'
             run: |
                 "${{ github.action_path }}/Scripts/RenderBadge" \
                     "${{ github.action_path }}/Resources/badge.svg.template" \
-                    "${{ inputs.title || inputs.badge }}" \
+                    "${{ inputs.title || steps.status.outputs.badge }}" \
                     "${{ steps.status.outputs.status }}"
 
         -   name: Create ghost ref
@@ -51,9 +70,9 @@ runs:
                 cp $GITHUB_WORKSPACE/badge.svg status.svg
 
                 git add status.svg
-                git commit -m "update badge: ${{ inputs.badge }} (${{ steps.status.outputs.status }})"
+                git commit -m "update badge: ${{ steps.status.outputs.badge }} (${{ steps.status.outputs.status }})"
 
                 # Force push using the provided token
                 git push --force \
                     https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git \
-                    HEAD:refs/badges/ci/${{ inputs.badge }}
+                    HEAD:refs/badges/ci/${{ steps.status.outputs.badge }}
