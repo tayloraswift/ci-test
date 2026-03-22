@@ -30,8 +30,12 @@ runs:
         -   name: Generate Badge
             shell: bash
             run: |
-                # Call your script to generate .github/resources/badge.svg
-                bash Scripts/RenderBadge "${{ inputs.title }}" "${{ steps.status.outputs.status }}"
+                ls -l
+                ls -l ${{ github.action_path }}
+                ${{ github.action_path }}/Scripts/RenderBadge \
+                    ${{ github.action_path }}/Resources/badge.template.svg \
+                    "${{ inputs.title }}" \
+                    "${{ steps.status.outputs.status }}"
 
         -   name: Commit and Force-Push to Subbranch
             shell: bash
@@ -48,7 +52,7 @@ runs:
                 git config user.email "automation@noreply.rarestype.com"
 
                 # Copy the generated badge to the root of this orphan branch
-                cp $GITHUB_WORKSPACE/.github/resources/badge.svg ./${{ inputs.badge_name }}.svg
+                cp $GITHUB_WORKSPACE/badge.svg ./${{ inputs.badge_name }}.svg
 
                 git add ./${{ inputs.badge_name }}.svg
                 git commit -m "Update badge: ${{ inputs.badge_name }} (${{ steps.status.outputs.status }})"
