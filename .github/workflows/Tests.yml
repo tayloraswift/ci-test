@@ -29,10 +29,10 @@ jobs:
                 if: always()
                 uses: ./.github/actions/publish-badge
                 with:
+                    status: "${{ job.status }}"
                     title: "linux build"
-                    badge_name: "${{ github.job }}"
-                    job_status: "${{ job.status }}"
-                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    badge: "${{ github.job }}"
+                    token: ${{ secrets.GITHUB_TOKEN }}
 
     macos:
         runs-on: macos-26
@@ -51,7 +51,7 @@ jobs:
                 if: always()
                 uses: ./.github/actions/publish-badge
                 with:
+                    status: "${{ job.status }}"
                     title: "macOS build"
-                    badge_name: "${{ github.job }}"
-                    job_status: "${{ job.status }}"
-                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    badge: "${{ github.job }}"
+                    token: ${{ secrets.GITHUB_TOKEN }}
