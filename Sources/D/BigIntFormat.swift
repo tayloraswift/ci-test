@@ -1,5 +1,7 @@
 @frozen public struct BigIntFormat {
-    @usableFromInline let _stride: UInt8
+    @usableFromInline
+
+    let _stride: UInt8
 
     @inlinable init(stride: UInt8) {
         self._stride = stride

@@ -17,12 +17,7 @@ The D library requires Swift 6.2 or later.
 | Platform | Status |
 | -------- | ------ |
 | 🐧 Linux | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/ci/badges/linux/linux.svg)](https://github.com/tayloraswift/d/actions/workflows/Tests.yml) |
-| 🤖 Android | [![Tests](https://github.com/tayloraswift/d/actions/workflows/android.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/android.yml) |
-| 🍏 Darwin | [![Tests](https://github.com/tayloraswift/d/actions/workflows/Tests.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/Tests.yml) |
-| 🍏 Darwin (iOS) | [![iOS](https://github.com/tayloraswift/d/actions/workflows/iOS.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/iOS.yml) |
-| 🍏 Darwin (tvOS) | [![tvOS](https://github.com/tayloraswift/d/actions/workflows/tvOS.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/tvOS.yml) |
-| 🍏 Darwin (visionOS) | [![visionOS](https://github.com/tayloraswift/d/actions/workflows/visionOS.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/visionOS.yml) |
-| 🍏 Darwin (watchOS) | [![watchOS](https://github.com/tayloraswift/d/actions/workflows/watchOS.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/watchOS.yml) |
+| 🍏 Darwin | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/ci/badges/macos/macos.svg)](https://github.com/tayloraswift/d/actions/workflows/Tests.yml) |
 
 
 [Check deployment minimums](https://swiftinit.org/docs/d#ss:platform-requirements)
