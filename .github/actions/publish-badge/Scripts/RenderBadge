@@ -6,7 +6,7 @@ BADGE_WIDTH_L=$((28 + BADGE_TITLE_CHARACTERS * 7))
 BADGE_WIDTH_R='60'
 
 if [[ "$3" == 'passing' ]]; then
-    BADGE_STATUS_FG='#ffffff'
+    BADGE_STATUS_FG='#000000'
 else
     BADGE_STATUS_FG='#000000'
 fi

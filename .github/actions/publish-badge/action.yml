@@ -31,7 +31,7 @@ runs:
             shell: bash
             run: |
                 "${{ github.action_path }}/Scripts/RenderBadge" \
-                    "${{ github.action_path }}/Resources/badge.template.svg" \
+                    "${{ github.action_path }}/Resources/badge.svg.template" \
                     "${{ inputs.title || inputs.badge }}" \
                     "${{ steps.status.outputs.status }}"
 
