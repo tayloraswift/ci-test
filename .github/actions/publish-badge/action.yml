@@ -1,9 +1,6 @@
 name: "Generate and Publish Badge"
 description: "Generates a status badge and pushes it to a ghost ref"
 inputs:
-    status:
-        description: "Status of the calling job"
-        required: true
     token:
         description: "GitHub token"
         required: true
@@ -24,7 +21,7 @@ runs:
                 if [[ "${{ github.ref }}" != "refs/heads/${{ github.event.repository.default_branch }}" ]]; then
                     echo "status=none" >> $GITHUB_OUTPUT
                     echo "Skipping badge generation: Not on the default branch."
-                elif [[ "${{ inputs.status }}" == "success" ]]; then
+                elif [[ "${{ job.status }}" == "success" ]]; then
                     echo "status=passing" >> $GITHUB_OUTPUT
                 else
                     echo "status=failing" >> $GITHUB_OUTPUT
