@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BADGE_TITLE_CHARACTERS=$(echo -n "$2" | wc -c)
-BADGE_WIDTH_L=$((28 + BADGE_TITLE_CHARACTERS * 7))
+BADGE_WIDTH_L=$((30 + BADGE_TITLE_CHARACTERS * 7))
 BADGE_WIDTH_R='60'
 
 if [[ "$3" == 'passing' ]]; then
