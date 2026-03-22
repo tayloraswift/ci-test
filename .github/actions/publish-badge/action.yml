@@ -17,18 +17,22 @@ inputs:
 runs:
     using: "composite"
     steps:
-        -   name: Translate Job Status
+        -   name: Interpret status
             id: status
             shell: bash
             run: |
-                if [[ "${{ inputs.status }}" == "success" ]]; then
-                echo "status=passing" >> $GITHUB_OUTPUT
+                if [[ "${{ github.ref }}" != "refs/heads/${{ github.event.repository.default_branch }}" ]]; then
+                    echo "status=none" >> $GITHUB_OUTPUT
+                    echo "Skipping badge generation: Not on the default branch."
+                elif [[ "${{ inputs.status }}" == "success" ]]; then
+                    echo "status=passing" >> $GITHUB_OUTPUT
                 else
-                echo "status=failing" >> $GITHUB_OUTPUT
+                    echo "status=failing" >> $GITHUB_OUTPUT
                 fi
 
         -   name: Create badge
             shell: bash
+            if: steps.status.outputs.status != 'none'
             run: |
                 "${{ github.action_path }}/Scripts/RenderBadge" \
                     "${{ github.action_path }}/Resources/badge.svg.template" \
@@ -37,13 +41,14 @@ runs:
 
         -   name: Create ghost ref
             shell: bash
+            if: steps.status.outputs.status != 'none'
             run: |
                 # Work in a temporary directory to avoid touching the main workspace tree
                 mkdir -p /tmp/badge-publish
                 cd /tmp/badge-publish
 
                 # Initialize an empty git repo
-                git init
+                git init --quiet
 
                 git config user.name "rarest automation"
                 git config user.email "automation@noreply.rarestype.com"
