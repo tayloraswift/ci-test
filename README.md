@@ -1,6 +1,3 @@
-[![Tests](https://github.com/tayloraswift/d/actions/workflows/Tests.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/Tests.yml)
-[![Documentation](https://github.com/tayloraswift/d/actions/workflows/Documentation.yml/badge.svg)](https://github.com/tayloraswift/d/actions/workflows/Documentation.yml)
-
 D is a pure Swift decimal arithmetic library and formatting DSL.
 
 D is Foundation-free, and can also serve as a lightweight `Double` formatting engine for applications that don’t need decimal functionality, but still have strong reasons to avoid linking Foundation, such as WebAssembly applications.
@@ -16,8 +13,8 @@ The D library requires Swift 6.2 or later.
 
 | Platform | Status |
 | -------- | ------ |
-| 🐧 Linux | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/ci/badges/linux/linux.svg)](https://github.com/tayloraswift/d/actions/workflows/Tests.yml) |
-| 🍏 Darwin | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/ci/badges/macos/macos.svg)](https://github.com/tayloraswift/d/actions/workflows/Tests.yml) |
+| 🐧 Linux | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/refs/badges/ci/linux/status.svg)](https://github.com/tayloraswift/ci-test/actions/workflows/Tests.yml) |
+| 🍏 Darwin | [![Tests](https://raw.githubusercontent.com/tayloraswift/ci-test/refs/badges/ci/macos/status.svg)](https://github.com/tayloraswift/ci-test/actions/workflows/Tests.yml) |
 
 
 [Check deployment minimums](https://swiftinit.org/docs/d#ss:platform-requirements)

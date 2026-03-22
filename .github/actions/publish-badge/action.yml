@@ -1,16 +1,16 @@
 name: "Generate and Publish Badge"
 description: "Generates a status badge, pushes it to an isolated branch, and purges the Camo cache"
 inputs:
+    status:
+        description: "The status of the caller job"
+        required: true
     title:
         description: "The text to display on the left side of the badge"
         required: true
-    badge_name:
+    badge:
         description: "The unique identifier for this badge (used for filename and branch name)"
         required: true
-    job_status:
-        description: "The status of the caller job"
-        required: true
-    github_token:
+    token:
         description: "GitHub token for pushing the branch and calling the API"
         required: true
 
@@ -21,7 +21,7 @@ runs:
             id: status
             shell: bash
             run: |
-                if [[ "${{ inputs.job_status }}" == "success" ]]; then
+                if [[ "${{ inputs.status }}" == "success" ]]; then
                 echo "status=passing" >> $GITHUB_OUTPUT
                 else
                 echo "status=failing" >> $GITHUB_OUTPUT
@@ -30,8 +30,6 @@ runs:
         -   name: Generate Badge
             shell: bash
             run: |
-                ls -l
-                ls -l ${{ github.action_path }}
                 ${{ github.action_path }}/Scripts/RenderBadge \
                     ${{ github.action_path }}/Resources/badge.template.svg \
                     "${{ inputs.title }}" \
@@ -44,19 +42,19 @@ runs:
                 mkdir -p /tmp/badge-publish
                 cd /tmp/badge-publish
 
-                # Initialize an empty git repo and checkout the specific subbranch
+                # Initialize an empty git repo
                 git init
-                git checkout -b ci/badges/${{ inputs.badge_name }}
 
                 git config user.name "rarest automation"
                 git config user.email "automation@noreply.rarestype.com"
 
                 # Copy the generated badge to the root of this orphan branch
-                cp $GITHUB_WORKSPACE/badge.svg ./${{ inputs.badge_name }}.svg
+                cp $GITHUB_WORKSPACE/badge.svg status.svg
 
-                git add ./${{ inputs.badge_name }}.svg
-                git commit -m "Update badge: ${{ inputs.badge_name }} (${{ steps.status.outputs.status }})"
+                git add status.svg
+                git commit -m "update badge: ${{ inputs.badge }} (${{ steps.status.outputs.status }})"
 
                 # Force push using the provided token
-                git remote add origin https://x-access-token:${{ inputs.github_token }}@github.com/${{ github.repository }}.git
-                git push --force origin ci/badges/${{ inputs.badge_name }}
+                git push --force \
+                    https://x-access-token:${{ inputs.token }}@github.com/${{ github.repository }}.git \
+                    HEAD:refs/badges/ci/${{ inputs.badge }}
