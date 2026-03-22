@@ -9,7 +9,7 @@ on:
 permissions:
     contents: write
 jobs:
-    linux:
+    Linux:
         runs-on: ubuntu-24.04
         name: Ubuntu 24.04
         steps:
@@ -30,13 +30,11 @@ jobs:
                 uses: ./.github/actions/publish-badge
                 with:
                     status: "${{ job.status }}"
-                    title: "linux build"
                     badge: "${{ github.job }}"
                     token: ${{ secrets.GITHUB_TOKEN }}
 
-    macos:
+    macOS:
         runs-on: macos-26
-        name: macOS
         steps:
             -   name: 💖 Checkout repository 💖
                 uses: actions/checkout@v6
@@ -52,6 +50,5 @@ jobs:
                 uses: ./.github/actions/publish-badge
                 with:
                     status: "${{ job.status }}"
-                    title: "macOS build"
                     badge: "${{ github.job }}"
                     token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,18 +1,18 @@
 name: "Generate and Publish Badge"
-description: "Generates a status badge, pushes it to an isolated branch, and purges the Camo cache"
+description: "Generates a status badge and pushes it to a ghost ref"
 inputs:
     status:
-        description: "The status of the caller job"
-        required: true
-    title:
-        description: "The text to display on the left side of the badge"
-        required: true
-    badge:
-        description: "The unique identifier for this badge (used for filename and branch name)"
+        description: "Status of the calling job"
         required: true
     token:
-        description: "GitHub token for pushing the branch and calling the API"
+        description: "GitHub token"
         required: true
+    badge:
+        description: "Unique identifier for this badge"
+        required: true
+    title:
+        description: "Custom text to display on the left side of the badge"
+        required: false
 
 runs:
     using: "composite"
@@ -27,15 +27,15 @@ runs:
                 echo "status=failing" >> $GITHUB_OUTPUT
                 fi
 
-        -   name: Generate Badge
+        -   name: Create badge
             shell: bash
             run: |
-                ${{ github.action_path }}/Scripts/RenderBadge \
-                    ${{ github.action_path }}/Resources/badge.template.svg \
-                    "${{ inputs.title }}" \
+                "${{ github.action_path }}/Scripts/RenderBadge" \
+                    "${{ github.action_path }}/Resources/badge.template.svg" \
+                    "${{ inputs.title | inputs.badge }}" \
                     "${{ steps.status.outputs.status }}"
 
-        -   name: Commit and Force-Push to Subbranch
+        -   name: Create ghost ref
             shell: bash
             run: |
                 # Work in a temporary directory to avoid touching the main workspace tree
