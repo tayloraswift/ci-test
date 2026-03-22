@@ -44,3 +44,12 @@ jobs:
 
             -   name: 💖 Run tests 💖
                 run: Scripts/TestAll
+
+            -   name: 💖 Publish Status Badge 💖
+                if: always()
+                uses: ./.github/actions/publish-badge
+                with:
+                    title: "macOS build"
+                    badge_name: "${{ github.job }}"
+                    job_status: "${{ job.status }}"
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
