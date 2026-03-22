@@ -32,7 +32,7 @@ runs:
             run: |
                 "${{ github.action_path }}/Scripts/RenderBadge" \
                     "${{ github.action_path }}/Resources/badge.template.svg" \
-                    "${{ inputs.title | inputs.badge }}" \
+                    "${{ inputs.title || inputs.badge }}" \
                     "${{ steps.status.outputs.status }}"
 
         -   name: Create ghost ref
