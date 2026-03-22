@@ -6,8 +6,6 @@ on:
     pull_request:
         branches: [ master ]
 
-permissions:
-    contents: write
 jobs:
     Linux:
         runs-on: ubuntu-24.04
