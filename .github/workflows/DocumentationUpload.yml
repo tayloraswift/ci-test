@@ -23,5 +23,5 @@ jobs:
                 uses: rarestype/rarestbadge@v1
                 if: always()
                 with:
-                    badge: Documentation
+                    badge: Documentation/_all
                     title: Documentation
